@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".newww.SplashActivity">
+        <activity android:name=".auth.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".QuestionActivity" />
-        <activity android:name=".newww.MainActivity" />
+        <activity android:name="com.example.goodearning.nav.MainActivity" />
         <activity android:name=".ReferralActivity" />
         <activity android:name=".PointsActivity" />
-        <activity android:name=".OTPWaitingActivity" />
-        <activity android:name=".TakeSelfieActivity" />
-        <activity android:name=".newww.LoginActivity" />
-        <activity android:name=".PhoneVerificationActivity" />
+        <activity android:name=".auth.OTPWaitingActivity" />
+        <activity android:name=".auth.TakeSelfieActivity" />
+        <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".auth.PhoneVerificationActivity" />
     </application>
 
 </manifest>
