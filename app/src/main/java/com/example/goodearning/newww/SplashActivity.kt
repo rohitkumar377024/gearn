@@ -9,12 +9,14 @@ import com.example.goodearning.R
 
 class SplashActivity : AppCompatActivity() {
 
-    var loggedInAlready = false
+    //TODO -> Modifies State
+    var loggedInAlready = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        /* Handles Where to Go from Splash Screen */
         Handler().postDelayed({
             when (loggedInAlready) {
                 true -> takeToMainScreen()
@@ -23,15 +25,14 @@ class SplashActivity : AppCompatActivity() {
         }, 2000)
     }
 
+    /* Intent for Main Screen */
     private fun takeToMainScreen() {
-        Log.d("splash_activity", "logged in already")
-        //todo -> Take to MainActivity once Created Later
         startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
+    /* Intent for Login Screen */
     private fun takeToLoginScreen() {
-        Log.d("splash_activity", "take to login screen")
         startActivity(Intent(this, LoginActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
