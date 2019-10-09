@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.goodearning.R
 import com.example.goodearning.auth.LoginActivity
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -23,12 +23,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        const val ANSWER_AND_EARN_IDENTIFER = 13L /* Long DataType is needed for this parameter in Material Drawer */
+        const val ANSWER_AND_EARN_IDENTIFIER = 13L /* Long DataType is needed for this parameter in Material Drawer */
     }
+
+    /* Shared Instance of FirebaseAuth */
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        /* Getting the Instance of FirebaseAuth Just Once in OnCreate() */
+        auth = FirebaseAuth.getInstance()
 
         /* Sets Toolbar as the SupportActionBar for this Activity */
         setSupportActionBar(toolbar)
@@ -43,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             .withToolbar(toolbar)
             .withAccountHeader(createAccountHeader())
             .addDrawerItems(
-                PrimaryDrawerItem().withName("Answer and Earn").withIdentifier(ANSWER_AND_EARN_IDENTIFER),
+                PrimaryDrawerItem().withName("Answer and Earn").withIdentifier(ANSWER_AND_EARN_IDENTIFIER),
                 PrimaryDrawerItem().withName("Skipped Questions"),
                 PrimaryDrawerItem().withName("Points Summary"),
                 PrimaryDrawerItem().withName("Refer"),
@@ -64,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         /* Initially Loading Up Answer and Earn Fragment with Its Identifier in Material Drawer  */
-        result.setSelection(ANSWER_AND_EARN_IDENTIFER)
+        result.setSelection(ANSWER_AND_EARN_IDENTIFIER)
     }
 
     /* Creates the Account Header */
@@ -91,7 +97,8 @@ class MainActivity : AppCompatActivity() {
 
     /* Logging Out */
     private fun logout() {
-        Toast.makeText(this, "Logging Out...", Toast.LENGTH_SHORT).show()
+        auth.signOut()
+        Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, LoginActivity::class.java))
     }
 
