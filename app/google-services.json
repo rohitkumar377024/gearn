@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1075878459414",
+    "firebase_url": "https://gearn-2e88f.firebaseio.com",
+    "project_id": "gearn-2e88f",
+    "storage_bucket": "gearn-2e88f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075878459414:android:6017ecc19ba22dde6c5d37",
+        "android_client_info": {
+          "package_name": "com.example.goodearning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075878459414-0gjpm5nl2lacb4kdb2s4b0ap4urvlfgr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.goodearning",
+            "certificate_hash": "92be78eb528aee5b227a2a5cf9a5bd9216905492"
+          }
+        },
+        {
+          "client_id": "1075878459414-oq0p6b67lurerf3ekt6o3t2fif0rm1k8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXj74eK1_hfT-idl2lanQ3vI2w_Dy4oz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075878459414-oq0p6b67lurerf3ekt6o3t2fif0rm1k8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

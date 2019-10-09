@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.goodearning.R
 import com.example.goodearning.auth.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -20,6 +21,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val ANSWER_AND_EARN_IDENTIFER = 13L /* Long DataType is needed for this parameter in Material Drawer */
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             .withToolbar(toolbar)
             .withAccountHeader(createAccountHeader())
             .addDrawerItems(
-                PrimaryDrawerItem().withName("Answer and Earn").withIdentifier(13),
+                PrimaryDrawerItem().withName("Answer and Earn").withIdentifier(ANSWER_AND_EARN_IDENTIFER),
                 PrimaryDrawerItem().withName("Skipped Questions"),
                 PrimaryDrawerItem().withName("Points Summary"),
                 PrimaryDrawerItem().withName("Refer"),
@@ -58,8 +63,8 @@ class MainActivity : AppCompatActivity() {
             })
             .build()
 
-        /* Initially Loading Up Answer and Earn Fragment */
-        result.setSelection(13)
+        /* Initially Loading Up Answer and Earn Fragment with Its Identifier in Material Drawer  */
+        result.setSelection(ANSWER_AND_EARN_IDENTIFER)
     }
 
     /* Creates the Account Header */
@@ -89,4 +94,5 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Logging Out...", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, LoginActivity::class.java))
     }
+
 }

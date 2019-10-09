@@ -10,7 +10,7 @@ import com.example.goodearning.nav.MainActivity
 class SplashActivity : AppCompatActivity() {
 
     //TODO -> Modifies State
-    var loggedInAlready = true
+    var loggedInAlready = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

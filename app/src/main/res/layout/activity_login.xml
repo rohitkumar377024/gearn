@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/login_google_auth_btn"
         android:layout_width="0dp"
@@ -38,20 +39,20 @@
         app:layout_constraintTop_toBottomOf="@+id/login_logo_textview" />
 
 
-    <Button
-        android:id="@+id/auth_login_loginbutton2"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/auth_button"
-        android:text="Log In with Facebook"
-        android:textAllCaps="false"
-        android:textColor="#7EFFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_google_auth_btn" />
+<!--    <Button-->
+<!--        android:id="@+id/auth_login_loginbutton2"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:background="@drawable/auth_button"-->
+<!--        android:text="Log In with Facebook"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="#7EFFFFFF"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/login_google_auth_btn" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
