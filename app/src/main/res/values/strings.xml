@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GEarn</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="facebook_app_id">417932555534720</string>
+    <string name="fb_login_protocol_scheme">fb417932555534720</string>
+
+<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
 </resources>

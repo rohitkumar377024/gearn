@@ -2,12 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/auth_gradient">
 
     <TextView
-        android:id="@+id/login_logo_textview"
+        android:id="@+id/phone_verification_mobile_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -20,98 +21,124 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
+<!--    <EditText-->
+<!--        android:padding="15dp"-->
+<!--        android:background="@drawable/auth_field"-->
+<!--        android:textColorHint="#7EFFFFFF"-->
+<!--        android:textColor="#ADFFFFFF"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:inputType="phone"-->
+<!--        android:ems="10"-->
+<!--        android:id="@+id/phone_verification_country_code_edittext"-->
+<!--        android:hint="Country Code" android:layout_marginTop="32dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/phone_verification_mobile_textview"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:layout_marginLeft="24dp"-->
+<!--        android:layout_marginRight="24dp"-->
+<!--        android:layout_marginEnd="24dp"/>-->
+
     <EditText
-        android:padding="15dp"
+        android:gravity="center"
         android:background="@drawable/auth_field"
+        android:padding="15dp"
         android:textColorHint="#7EFFFFFF"
         android:textColor="#ADFFFFFF"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:inputType="textPersonName"
+        android:inputType="phone"
         android:ems="10"
-        android:id="@+id/auth_login_email_edittext"
-        android:hint="Country Code" android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/login_logo_textview"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginEnd="24dp"/>
-    <EditText
-        android:background="@drawable/auth_field"
-        android:padding="15dp"
-        android:textColorHint="#7EFFFFFF"
-        android:textColor="#ADFFFFFF"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/auth_login_password_edittext"
+        android:id="@+id/phone_verification_mobile_number_edittext"
         android:hint="Mobile Number"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/auth_login_email_edittext"
-        app:layout_constraintEnd_toEndOf="@+id/auth_login_email_edittext"
-        app:layout_constraintStart_toStartOf="@+id/auth_login_email_edittext"/>
+        app:layout_constraintTop_toBottomOf="@+id/phone_verification_mobile_textview"
+        app:layout_constraintEnd_toEndOf="@+id/phone_verification_mobile_textview"
+        app:layout_constraintStart_toStartOf="@+id/phone_verification_mobile_textview"/>
+
     <Button
         android:textSize="18sp"
         android:background="@drawable/auth_button"
         android:textColor="#7EFFFFFF"
         android:textAllCaps="false"
-        android:text="Verify"
+        android:text="Send OTP"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:id="@+id/login_google_auth_btn"
+        android:id="@+id/phone_send_otp_btn"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/auth_login_password_edittext"
-        app:layout_constraintStart_toStartOf="@+id/auth_login_password_edittext"
-        app:layout_constraintEnd_toEndOf="@+id/auth_login_password_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/phone_verification_mobile_number_edittext"
+        app:layout_constraintStart_toStartOf="@+id/phone_verification_mobile_number_edittext"
+        app:layout_constraintEnd_toEndOf="@+id/phone_verification_mobile_number_edittext"
         app:layout_constraintHorizontal_bias="0.0"/>
 
-    <LinearLayout
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/login_google_auth_btn">
-        <TextView
-            android:textSize="15dp"
-            android:layout_weight="7"
-            android:gravity="right"
-            android:textColor="#fff"
-            android:text="Forgot your password?"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/auth_login_forgot_password_description"
-            android:visibility="visible"/>
-        <TextView
-            android:textSize="15dp"
-            android:layout_marginLeft="8dp"
-            android:layout_weight="5"
-            android:fontFamily="sans-serif-light"
-            android:textStyle="bold"
-            android:textColor="#fff"
-            android:text="Reset it here."
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/auth_login_reset_password_textview"
-            android:visibility="visible"/>
-    </LinearLayout>
-
     <Button
-        android:fontFamily="sans-serif-light"
-        android:textColor="#fff"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:textStyle="bold"
-        android:background="@drawable/auth_field"
-        android:text="Don't have an account? Sign up."
+        android:id="@+id/phone_resend_otp_btn"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:id="@+id/auth_login_take_to_signup_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
+        android:background="@drawable/auth_button"
+        android:text="Re-Send OTP"
+        android:textAllCaps="false"
+        android:textColor="#7EFFFFFF"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/phone_send_otp_btn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/phone_send_otp_btn"
+        app:layout_constraintTop_toBottomOf="@+id/phone_send_otp_btn" />
+
+<!--    <com.mukesh.OtpView-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:id="@+id/otp_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:inputType="number"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        app:itemCount="6"-->
+<!--        app:itemHeight="30dp"-->
+<!--        app:itemSpacing="15dp"-->
+<!--        app:itemWidth="30dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/phone_resend_otp_btn"-->
+<!--        app:viewType="line" />-->
+
+    <EditText
+        android:id="@+id/phone_enter_otp_edittext"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/auth_field"
+        android:ems="10"
+        android:hint="Enter OTP"
+        android:gravity="center"
+        android:inputType="phone"
+        android:padding="15dp"
+        android:textColor="#ADFFFFFF"
+        android:textColorHint="#7EFFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/phone_resend_otp_btn"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/phone_resend_otp_btn"
+        app:layout_constraintTop_toBottomOf="@+id/phone_resend_otp_btn" />
+
+    <Button
+        android:layout_marginTop="16dp"
+        android:id="@+id/phone_verify_otp_btn"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/auth_button"
+        android:text="Verify OTP"
+        android:textAllCaps="false"
+        android:textColor="#7EFFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/phone_enter_otp_edittext"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/phone_enter_otp_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/phone_enter_otp_edittext" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
