@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
         /* Handles Where to Go from Splash Screen */
         Handler().postDelayed({
             when (loggedInAlready) {
-                true -> takeToMainScreen()
+                true -> startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
                 false -> takeToLoginScreen()
             }
         }, 2000)
