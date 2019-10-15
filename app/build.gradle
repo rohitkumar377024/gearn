@@ -60,6 +60,9 @@ dependencies {
     /* Cloud Storage */
     implementation 'com.google.firebase:firebase-storage:19.1.0'
 
+    /* Ads */
+    implementation 'com.google.firebase:firebase-ads:18.2.0'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
