@@ -18,10 +18,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.provider.MediaStore
 import android.app.Activity
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import android.os.StrictMode
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import java.io.ByteArrayOutputStream
 
 class ProfileSetupActivity : AppCompatActivity() {
 
@@ -30,11 +33,11 @@ class ProfileSetupActivity : AppCompatActivity() {
 
     companion object {
         /* TAGs for Activity Results */
-        const val PICK_IMAGE = 13
+        const val PICK_GALLERY = 13
         const val PICK_CAMERA = 19
 
-        /* State of Profile Image */
-        var PROFILE_IMAGE_STATE = 3 // 1 -> Gallery, 2 -> Camera, 3 -> Default
+        /* State of Profile Image (1 -> Gallery, 2 -> Camera, 3 -> Default) */
+        var PROFILE_IMAGE_STATE = 3
     }
 
     /* Global Variable for Gallery Photo Operation */
@@ -66,17 +69,29 @@ class ProfileSetupActivity : AppCompatActivity() {
         //todo -> revise path name
         val userProfilePhotosRef = FirebaseStorage.getInstance().reference.child("user_profile_photos").child(auth.currentUser?.uid!!)
 
-        /* Storage Stuff */
-        val uploadTask = userProfilePhotosRef.putFile(Uri.parse("android.resource://"
-                                            + R::class.java.getPackage()?.name + "/" + R.drawable.ic_profile))
+        //Stores the UploadTask
+        var uploadTask: UploadTask? = null
 
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
+        /* Storage Stuff */
+        when (PROFILE_IMAGE_STATE) {
+            1 -> uploadTask = userProfilePhotosRef.putFile(galleryImageUri) //GALLERY
+            2 -> uploadTask = userProfilePhotosRef.putBytes(getImageDataAsByteArray()) //CAMERA
+            3 -> uploadTask = userProfilePhotosRef.putFile(Uri.parse("android.resource://" + R::class.java.getPackage()?.name + "/" + R.drawable.ic_profile)) //DEFAULT PIC
         }
+
+        uploadTask?.addOnFailureListener { // Handle unsuccessful uploads
+        }?.addOnSuccessListener { }// taskSnapshot.metadata contains file metadata such as size, content-type, etc. // ...
+    }
+
+    // Get the Data from Profile Photo ImageView as Bytes
+    private fun getImageDataAsByteArray(): ByteArray {
+        profile_setup_photo_imageview.isDrawingCacheEnabled = true
+        profile_setup_photo_imageview.buildDrawingCache()
+        val bitmap = (profile_setup_photo_imageview.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        return data
     }
 
     /* Handles Profile Photo Setting Up Operations */
@@ -101,13 +116,19 @@ class ProfileSetupActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) { /* First Check If Result Code is OK */
             when (requestCode) { /* Check Which Request Code */
-                PICK_IMAGE -> { /* Gallery Operation */
+                PICK_GALLERY -> { /* Gallery Operation */
                     galleryImageUri = data?.data!!
                     profile_setup_photo_imageview.setImageURI(galleryImageUri)
+                    PROFILE_IMAGE_STATE = 1
+                    addBorder()
                 }
                 PICK_CAMERA -> { /* Camera Operation */
-                    cameraImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.parse(cameraCurrentPhotoPath))
-                    profile_setup_photo_imageview.setImageBitmap(cameraImageBitmap)
+                    if (::cameraCurrentPhotoPath.isInitialized) {
+                        cameraImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.parse(cameraCurrentPhotoPath))
+                        profile_setup_photo_imageview.setImageBitmap(cameraImageBitmap)
+                        PROFILE_IMAGE_STATE = 2
+                        addBorder()
+                    }
                 }
             }
         }
@@ -118,9 +139,7 @@ class ProfileSetupActivity : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
-        removeBorder()
-        addBorder()
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_GALLERY)
     }
 
     /* Handles Camera Photo Taking Operation */
@@ -143,8 +162,6 @@ class ProfileSetupActivity : AppCompatActivity() {
             if (photoFile != null) {
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
                 startActivityForResult(cameraIntent, PICK_CAMERA)
-                removeBorder()
-                addBorder()
             }
         }
     }

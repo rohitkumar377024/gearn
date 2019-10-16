@@ -110,6 +110,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 //                    updateUI(user)
 
                     startActivity(Intent(this, ProfileSetupActivity::class.java))
+                    finish()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("login_activity", "signInWithCredential:failure", task.exception)
@@ -124,6 +125,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     /* Handles Phone Number Sign In Procedure */
     private fun phoneNumberSignIn() {
         startActivity(Intent(this, PhoneVerificationActivity::class.java))
+        finish()
     }
 
     /* Handling Result */
@@ -174,6 +176,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                     /* Go to Main Screen Now once Successfully Authenticated */
                     startActivity(Intent(this, ProfileSetupActivity::class.java))
+                    finish()
 //                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.

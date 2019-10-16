@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
         /* Handles Where to Go from Splash Screen */
         Handler().postDelayed({
             when (loggedInAlready) {
-                true -> startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
+                true -> takeToMainScreen()//startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
                 false -> takeToLoginScreen()
             }
         }, 2000)
@@ -37,12 +37,14 @@ class SplashActivity : AppCompatActivity() {
     private fun takeToMainScreen() {
         startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
     }
 
     /* Intent for Login Screen */
     private fun takeToLoginScreen() {
         startActivity(Intent(this, LoginActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
     }
 
     override fun onStart() {

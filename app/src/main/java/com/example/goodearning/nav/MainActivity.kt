@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         auth.signOut()
         Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
 }
