@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import android.content.Intent
+import android.view.View
 
 class PhoneVerificationActivity: AppCompatActivity() {
 
@@ -29,6 +30,10 @@ class PhoneVerificationActivity: AppCompatActivity() {
         /* Getting the Instance of FirebaseAuth Just Once in OnCreate() */
         auth = FirebaseAuth.getInstance()
 
+        /* Show Send OTP LL and Hide Verify OTP LL at Start */
+        showSendOTPLL()
+        hideVerifyOTPLL()
+
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
                 Toast.makeText(baseContext, "Verification Completed", Toast.LENGTH_SHORT).show()
@@ -42,6 +47,10 @@ class PhoneVerificationActivity: AppCompatActivity() {
                 super.onCodeSent(s, forceResendingToken)
                 verificationCode = s
                 Toast.makeText(baseContext, "OTP Code Sent", Toast.LENGTH_SHORT).show()
+
+                /* Show Verify OTP LL and Hide Send OTP LL Now Once OTP Code Sent */
+                showVerifyOTPLL()
+                hideSendOTPLL()
             }
         }
 
@@ -66,10 +75,17 @@ class PhoneVerificationActivity: AppCompatActivity() {
     private fun signInWithPhone(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
             when {
-                task.isSuccessful -> { startActivity(Intent(baseContext, ProfileSetupActivity::class.java)); finish() }
+                task.isSuccessful -> {
+                    Toast.makeText(baseContext, "OTP Verified Successfully", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(baseContext, ProfileSetupActivity::class.java)); finish() }
                 else -> Toast.makeText(baseContext, "Incorrect OTP", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    /* Layout Visibility Helper Methods */
+    private fun showSendOTPLL() { send_otp_ll.visibility = View.VISIBLE }
+    private fun hideSendOTPLL() { send_otp_ll.visibility = View.GONE }
+    private fun showVerifyOTPLL() { phone_verify_otp_ll.visibility = View.VISIBLE }
+    private fun hideVerifyOTPLL() { phone_verify_otp_ll.visibility = View.GONE }
 }

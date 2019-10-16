@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: com.rizlee:permission-handler:1.0.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9d25b138c7b82a59130efed8876a54c8/permission-handler-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9d25b138c7b82a59130efed8876a54c8/permission-handler-1.0.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rizlee/permission-handler/1.0.0/def340b648f8acfec19be64631e826b177e88df1/permission-handler-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rizlee/permission-handler/1.0.0/9534fd4905fb7a2183d660fbff215baa7ebf7f78/permission-handler-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -34,14 +34,14 @@ dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "com.google.android.material:material:1.0.0"
 
-    /* OTP */
-    implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.0.0'
     /* Navigation Drawer */
     implementation "com.mikepenz:materialdrawer:7.0.0-rc08"
     /* Circle Image View */
     implementation 'de.hdodenhof:circleimageview:3.0.1'
-    /* Permissions*/
-    implementation 'com.androidisland.ezpermission:ezpermission:0.1.4'
+    /* Permissions Helper */
+    implementation "com.rizlee:permission-handler:1.0.0"
+    /* Country Picker */
+    implementation 'com.github.heetch:Android-country-picker:1.0.6'
 
     /* Firebase */
     /* Analytics - Recommended By Default */

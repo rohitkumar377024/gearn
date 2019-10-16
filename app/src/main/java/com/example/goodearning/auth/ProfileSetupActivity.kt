@@ -1,5 +1,6 @@
 package com.example.goodearning.auth
 
+import android.Manifest
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,8 +23,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import android.os.StrictMode
+import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import com.rizlee.handler.PermissionHandler
 import java.io.ByteArrayOutputStream
 
 class ProfileSetupActivity : AppCompatActivity() {
@@ -47,15 +50,28 @@ class ProfileSetupActivity : AppCompatActivity() {
     private lateinit var cameraImageBitmap: Bitmap
     private lateinit var cameraCurrentPhotoPath: String
 
+    private val PERMISSIONS = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_setup)
+
+        requestPermissions()
 
         auth = FirebaseAuth.getInstance() /* Getting the Instance of FirebaseAuth Just Once in OnCreate() */
         UID = auth.currentUser?.uid.toString() /* Initializing the UID variable with its value */
 
         profile_setup_photo_imageview.setOnClickListener { handleProfilePhoto() } /* Profile Photo Clicked */
         profile_setup_proceed_btn.setOnClickListener { completeProfileSetupProcessing() } /* Proceed Button Clicked */
+    }
+
+    private fun requestPermissions() = PermissionHandler.requestPermission(this, { permissionsGranted() }, PERMISSIONS)
+    private fun permissionsGranted() = Toast.makeText(applicationContext, "Permissions Granted Successfully.", Toast.LENGTH_SHORT).show()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        PermissionHandler.permissionsResult(this, PERMISSIONS, requestCode, grantResults, { permissionsGranted() },
+            { Toast.makeText(applicationContext, "Permission Not Successful.", Toast.LENGTH_SHORT).show() },
+            { Toast.makeText(applicationContext, "Permission Error.", Toast.LENGTH_SHORT).show() }
+        )
     }
 
     /* Handles Processing of Profile Setup -> Uploads Profile Photo to Storage + Stores Necessary Information to Database */

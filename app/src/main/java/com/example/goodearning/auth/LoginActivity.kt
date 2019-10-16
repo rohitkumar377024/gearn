@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.goodearning.nav.MainActivity
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -74,13 +75,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     /* Handles Facebook Sign In */
     private fun facebookSignIn() {
+        login_facebook_auth_btn_og.performClick() /* Perform Click */
+
 //         Initialize Facebook Login button
         callbackManager = CallbackManager.Factory.create()
 
-        login_facebook_auth_btn.setReadPermissions("email", "public_profile")
-        login_facebook_auth_btn.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+        login_facebook_auth_btn_og.setReadPermissions("email", "public_profile")
+        login_facebook_auth_btn_og.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d("login_activity", "facebook:onSuccess:$loginResult")
+                Toast.makeText(baseContext, "Facebook Sign In Successful. Please Wait.", Toast.LENGTH_LONG).show()
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
@@ -109,7 +113,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     val user = auth.currentUser
 //                    updateUI(user)
 
-                    startActivity(Intent(this, ProfileSetupActivity::class.java))
+                    Toast.makeText(this, "Signed in Successfully.", Toast.LENGTH_LONG).show()
+
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
                     // If sign in fails, display a message to the user.
@@ -175,7 +181,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     Log.d("login_activity -> acc", "Photo Url USER-> ${user?.photoUrl}")
 
                     /* Go to Main Screen Now once Successfully Authenticated */
-                    startActivity(Intent(this, ProfileSetupActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
 //                    updateUI(user)
                 } else {

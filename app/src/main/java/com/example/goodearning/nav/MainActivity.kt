@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.goodearning.R
 import com.example.goodearning.auth.LoginActivity
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -98,6 +99,9 @@ class MainActivity : AppCompatActivity() {
     /* Logging Out */
     private fun logout() {
         auth.signOut()
+
+        LoginManager.getInstance().logOut() /* Facebook Sign Out Too */
+
         Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, LoginActivity::class.java))
         finish()

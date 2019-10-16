@@ -1,13 +1,18 @@
 package com.example.goodearning.auth
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.goodearning.R
 import com.example.goodearning.nav.MainActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.rizlee.handler.PermissionHandler
 
 class SplashActivity : AppCompatActivity() {
 
@@ -27,7 +32,7 @@ class SplashActivity : AppCompatActivity() {
         /* Handles Where to Go from Splash Screen */
         Handler().postDelayed({
             when (loggedInAlready) {
-                true -> takeToMainScreen()//startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
+                true -> startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
                 false -> takeToLoginScreen()
             }
         }, 2000)
