@@ -22,6 +22,7 @@ class AnswerAndEarnFragment : Fragment() {
 
     private lateinit var adView: AdView
     private lateinit var goButton: Button
+    private lateinit var skipButton: Button
     private lateinit var textEditText: EditText
     private lateinit var numberEditText: EditText
     private lateinit var radioGroup: RadioGroup
@@ -46,7 +47,7 @@ class AnswerAndEarnFragment : Fragment() {
     private val fetchQuestionnairePostData = JSONObject().apply { put("appid", 3) }
     private val submitResponseAndFetchNextPostData = JSONObject().apply { put("appid", 3); put("optionid", ""); put("option", "UP"); put("userquestionaireanswerid", 8) }
     private val fetchSkippedQuestionsPostData = JSONObject().apply { put("appid", 3) }
-    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionaireanswerid", 9) }
+    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionansid", 9) }
 
     /* Helper Static Variables */
     companion object {
@@ -72,15 +73,17 @@ class AnswerAndEarnFragment : Fragment() {
         /* Fetch the First Question */
         vanillaPOST(fetchQuestionnaireUrl, fetchQuestionnairePostData, FETCH_QUESTION)
 
-        /* Fetch Next Question */
+        /* Post Response and Fetch Next Question */
         goButton.setOnClickListener {
             vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData, SUBMIT_RESPONSE_AND_FETCH_NEXT)
         }
 
+        /* Skip Question and Fetch Next Question */
+        skipButton.setOnClickListener {
+            vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE)
+            vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
+        }
 
-
-        //vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
-        //vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE)
 
         return v // Inflate the layout for this fragment
     }
@@ -104,7 +107,7 @@ class AnswerAndEarnFragment : Fragment() {
             }
             override fun onFailure(request: Request?, e: IOException?) {
                 val message = e?.message.toString()
-                Log.w("failure Response", message)
+                Log.w("post_failure", message)
             }
         })
     }
@@ -132,6 +135,7 @@ class AnswerAndEarnFragment : Fragment() {
     }
     private fun submitResponseAndFetchNext(responseBody: String) {
         val gson = GsonBuilder().create()
+        //todo -> add try catch
         val submitResponseAndFetchNextGSON = gson.fromJson(responseBody, SubmitResponseAndFetchNextObj::class.java)
 
         val question = submitResponseAndFetchNextGSON.question
@@ -185,6 +189,7 @@ class AnswerAndEarnFragment : Fragment() {
         adView = v.findViewById(R.id.adView)
 
         goButton = v.findViewById(R.id.question_go_button)
+        skipButton = v.findViewById(R.id.question_skip_button)
 
         textEditText = v.findViewById(R.id.text_edittext)
         numberEditText = v.findViewById(R.id.number_edittext)
