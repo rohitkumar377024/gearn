@@ -12,6 +12,8 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import android.content.Intent
 import android.view.View
+import com.heetch.countrypicker.CountryPickerCallbacks
+import com.heetch.countrypicker.CountryPickerDialog
 
 class PhoneVerificationActivity: AppCompatActivity() {
 
@@ -23,6 +25,8 @@ class PhoneVerificationActivity: AppCompatActivity() {
 
     private var verificationCode: String? = null
 
+    private var dialingCode = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone_verification)
@@ -33,6 +37,15 @@ class PhoneVerificationActivity: AppCompatActivity() {
         /* Show Send OTP LL and Hide Verify OTP LL at Start */
         showSendOTPLL()
         hideVerifyOTPLL()
+
+        /* Country Picker Functionality */
+        phone_verification_country_picker_button.setOnClickListener {
+            val countryPicker = CountryPickerDialog(this, CountryPickerCallbacks { country, flagResId ->
+                phone_verification_country_picker_button.text = "Dialing Code: +${country.dialingCode}, ISO Code: ${country.isoCode}"
+                dialingCode = country.dialingCode.toInt()
+            })
+            countryPicker.show()
+        }
 
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential) {
@@ -58,7 +71,7 @@ class PhoneVerificationActivity: AppCompatActivity() {
             val phoneNumber= phone_verification_mobile_number_edittext.text.toString()
 
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,                     // Phone number to verify
+                "+${dialingCode}$phoneNumber",    // Phone number to verify
                 60,                              // Timeout duration
                 TimeUnit.SECONDS,                // Unit of timeout
                 this,                            // Activity (for callback binding)
@@ -66,7 +79,7 @@ class PhoneVerificationActivity: AppCompatActivity() {
         }
 
         phone_verify_otp_btn.setOnClickListener {
-            val otp = phone_enter_otp_edittext.text.toString();
+            val otp = phone_enter_otp_edittext.text.toString()
             val credential = PhoneAuthProvider.getCredential(verificationCode!!, otp)
             signInWithPhone(credential)
         }

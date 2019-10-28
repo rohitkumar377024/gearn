@@ -3,8 +3,13 @@
     <words>
       <w>baos</w>
       <w>firebase</w>
+      <w>gson</w>
+      <w>optionid</w>
+      <w>questiontype</w>
+      <w>rdbtn</w>
       <w>selfie</w>
       <w>snackbar</w>
+      <w>userquestionaireanswerid</w>
     </words>
   </dictionary>
 </component>

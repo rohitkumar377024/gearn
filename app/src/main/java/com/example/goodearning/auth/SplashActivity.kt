@@ -29,13 +29,17 @@ class SplashActivity : AppCompatActivity() {
         /* Getting the Instance of FirebaseAuth Just Once in OnCreate() */
         auth = FirebaseAuth.getInstance()
 
-        /* Handles Where to Go from Splash Screen */
-        Handler().postDelayed({
-            when (loggedInAlready) {
-                true -> startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
-                false -> takeToLoginScreen()
-            }
-        }, 2000)
+        //todo -> currently taking to the main screen directly
+        takeToMainScreen()
+
+        //todo -> currently ignoring authentication check
+//        /* Handles Where to Go from Splash Screen */
+//        Handler().postDelayed({
+//            when (loggedInAlready) {
+//                true -> takeToMainScreen()//startActivity(Intent(this, ProfileSetupActivity::class.java))//takeToMainScreen() //todo - remember
+//                false -> takeToLoginScreen()
+//            }
+//        }, 2000)
     }
 
     /* Intent for Main Screen */

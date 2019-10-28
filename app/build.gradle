@@ -43,6 +43,11 @@ dependencies {
     /* Country Picker */
     implementation 'com.github.heetch:Android-country-picker:1.0.6'
 
+    /* OKHttp */
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
+    /* Gson */
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     /* Firebase */
     /* Analytics - Recommended By Default */
     implementation 'com.google.firebase:firebase-analytics:17.2.0'

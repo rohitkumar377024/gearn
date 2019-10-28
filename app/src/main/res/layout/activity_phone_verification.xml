@@ -29,6 +29,19 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/phone_verification_mobile_textview"
         android:orientation="vertical">
+        <Button
+            android:gravity="center"
+            android:background="@drawable/auth_button"
+            android:textColor="#7EFFFFFF"
+            android:textAllCaps="false"
+            android:padding="15dp"
+            android:text="Select Country Code"
+            android:textSize="18sp"
+            android:fontFamily="@font/helvetica_neue_medium"
+            android:textColorHint="#7EFFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/phone_verification_country_picker_button" />
         <EditText
             android:gravity="center"
             android:background="@drawable/auth_field"
@@ -40,7 +53,8 @@
             android:inputType="phone"
             android:ems="10"
             android:id="@+id/phone_verification_mobile_number_edittext"
-            android:hint="Mobile Number" />
+            android:hint="Mobile Number"
+            android:layout_marginTop="16dp"/>
         <Button
             android:textSize="18sp"
             android:background="@drawable/auth_button"

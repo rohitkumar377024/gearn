@@ -24,6 +24,7 @@ import android.net.Uri
 import android.util.Log
 import android.os.StrictMode
 import android.widget.Toast
+import com.example.goodearning.nav.MainActivity
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.rizlee.handler.PermissionHandler
@@ -76,12 +77,6 @@ class ProfileSetupActivity : AppCompatActivity() {
 
     /* Handles Processing of Profile Setup -> Uploads Profile Photo to Storage + Stores Necessary Information to Database */
     private fun completeProfileSetupProcessing() {
-        /* Database Stuff */
-        val name = profile_setup_name_edittext.text.toString() /* Get Name Input From User*/
-        val database = FirebaseDatabase.getInstance().reference /* Get Database Root Reference */
-        val nameRef = database.child("users").child(UID).child("name") /* Get Name Reference - root -> users -> uid -> name */
-        nameRef.setValue(name) /* Set Name Value in the Specified Reference */
-
         //todo -> revise path name
         val userProfilePhotosRef = FirebaseStorage.getInstance().reference.child("user_profile_photos").child(auth.currentUser?.uid!!)
 
@@ -95,8 +90,48 @@ class ProfileSetupActivity : AppCompatActivity() {
             3 -> uploadTask = userProfilePhotosRef.putFile(Uri.parse("android.resource://" + R::class.java.getPackage()?.name + "/" + R.drawable.ic_profile)) //DEFAULT PIC
         }
 
-        uploadTask?.addOnFailureListener { // Handle unsuccessful uploads
-        }?.addOnSuccessListener { }// taskSnapshot.metadata contains file metadata such as size, content-type, etc. // ...
+        uploadTask?.addOnFailureListener { /* Handle unsuccessful uploads */ }?.addOnSuccessListener {}// taskSnapshot.metadata contains file metadata such as size, content-type, etc. // ...
+
+        /* Get Download URL */
+        val urlTask = uploadTask?.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            userProfilePhotosRef.downloadUrl
+        }?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+
+                /* Photo URL Successfully Retrieving */
+                /* Now Saving to Database Stuff */
+                val database = FirebaseDatabase.getInstance().reference /* Get Database Root Reference */
+
+                val name = profile_setup_name_edittext.text.toString() /* Get Name Input From User */
+                val profileImageUrl = downloadUri.toString() /* Download URL for Profile Image of the User */
+
+                val firebaseUser = auth.currentUser
+                val email = firebaseUser?.email
+                val phoneNumber = firebaseUser?.phoneNumber
+
+                val nameRef = database.child("users").child(UID).child("name")
+                val profileImageUrlRef = database.child("users").child(UID).child("profile_image_url")
+                val emailRef = database.child("users").child(UID).child("email")
+                val phoneNumberRef = database.child("users").child(UID).child("phone_number")
+
+                nameRef.setValue(name) /* Set Name Value in the Specified Reference */
+                profileImageUrlRef.setValue(profileImageUrl) /* Set Name Value in the Specified Reference */
+                emailRef.setValue(email) /* Set Name Value in the Specified Reference */
+                phoneNumberRef.setValue(phoneNumber) /* Set Name Value in the Specified Reference */
+
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                // Handle failures
+                // ...
+            }
+        }
     }
 
     // Get the Data from Profile Photo ImageView as Bytes
