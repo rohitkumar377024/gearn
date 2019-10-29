@@ -40,14 +40,8 @@ class AnswerAndEarnFragment : Fragment() {
     /* URLs */
     private val fetchQuestionnaireUrl = "http://gearn.online/api/fetch"
     private val submitResponseAndFetchNextUrl = "http://gearn.online/api/submit"
-    private val fetchSkippedQuestionsUrl = "http://localhost:8888/gearn/public/api/fetchskipped"
+    private val fetchSkippedQuestionsUrl = "http://gearn.online/api/fetchskipped"
     private val skipQuestionnaireUrl = "http://gearn.online/api/skip"
-
-    /* POST Data */
-    private val fetchQuestionnairePostData = JSONObject().apply { put("appid", 3) }
-    private val submitResponseAndFetchNextPostData = JSONObject().apply { put("appid", 3); put("optionid", ""); put("option", "UP"); put("userquestionaireanswerid", 8) }
-    private val fetchSkippedQuestionsPostData = JSONObject().apply { put("appid", 3) }
-    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionaireanswerid", 9) }
 
     /* Helper Static Variables */
     companion object {
@@ -58,6 +52,15 @@ class AnswerAndEarnFragment : Fragment() {
     }
 
     private lateinit var v: View
+
+    //Stores questionaireanswerid received as response from FETCH POST request
+    var FETCH_userQuestionaireAnswerId: Int = -1
+
+    /* POST Data */
+    private val fetchQuestionnairePostData = JSONObject().apply { put("appid", 3) }
+    private val submitResponseAndFetchNextPostData = JSONObject().apply { put("appid", 3); put("optionid", ""); put("option", "UP"); put("userquestionaireanswerid", 8) }
+    private val fetchSkippedQuestionsPostData = JSONObject().apply { put("appid", 3) }
+    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionaireanswerid", 9) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_answer_and_earn, container, false)
@@ -83,7 +86,7 @@ class AnswerAndEarnFragment : Fragment() {
             vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE)
         }
 
-        //vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
+//        vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
 
         return v // Inflate the layout for this fragment
     }
@@ -118,6 +121,7 @@ class AnswerAndEarnFragment : Fragment() {
 
         val question = fetchedQuestionnaireGSON.question
         val questionType = fetchedQuestionnaireGSON.questiontype
+        FETCH_userQuestionaireAnswerId = fetchedQuestionnaireGSON.userquestionaireanswerid
 
         activity?.runOnUiThread {
             when (questionType) {
@@ -172,7 +176,67 @@ class AnswerAndEarnFragment : Fragment() {
         question_actual_question_textview.text = question
     }
 
-    fun addRadioButtons(number: Int, options: List<Options>) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* IGNORE BELOW CODE FOR NOW */
+
+    private fun addRadioButtons(number: Int, options: List<Options>) {
         for (row in 0..0) {
             val ll = RadioGroup(context)
             ll.orientation = LinearLayout.VERTICAL
@@ -238,8 +302,8 @@ class AnswerAndEarnFragment : Fragment() {
     private fun show(v: View) { v.visibility = View.VISIBLE }
 }
 
-data class FetchQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>)
-data class SubmitResponseAndFetchNextObj(val question: String, val questiontype: Int, val options: List<Options>)
-data class SkipQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>)
+data class FetchQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>, val userquestionaireanswerid: Int)
+data class SubmitResponseAndFetchNextObj(val question: String, val questiontype: Int, val options: List<Options>, val userquestionaireanswerid: Int)
+data class SkipQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>, val userquestionaireanswerid: Int)
 
 data class Options(val option: String, val sequence: Int, val optionid: Int)
