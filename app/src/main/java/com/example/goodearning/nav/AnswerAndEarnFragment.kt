@@ -47,7 +47,7 @@ class AnswerAndEarnFragment : Fragment() {
     private val fetchQuestionnairePostData = JSONObject().apply { put("appid", 3) }
     private val submitResponseAndFetchNextPostData = JSONObject().apply { put("appid", 3); put("optionid", ""); put("option", "UP"); put("userquestionaireanswerid", 8) }
     private val fetchSkippedQuestionsPostData = JSONObject().apply { put("appid", 3) }
-    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionansid", 9) }
+    private val skipQuestionnairePostData = JSONObject().apply { put("appid", 3); put("userquestionaireanswerid", 9) }
 
     /* Helper Static Variables */
     companion object {
@@ -81,9 +81,9 @@ class AnswerAndEarnFragment : Fragment() {
         /* Skip Question and Fetch Next Question */
         skipButton.setOnClickListener {
             vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE)
-            vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
         }
 
+        //vanillaPOST(fetchSkippedQuestionsUrl, fetchSkippedQuestionsPostData, FETCH_SKIPPED_QUESTIONS)
 
         return v // Inflate the layout for this fragment
     }
@@ -118,7 +118,6 @@ class AnswerAndEarnFragment : Fragment() {
 
         val question = fetchedQuestionnaireGSON.question
         val questionType = fetchedQuestionnaireGSON.questiontype
-//        val options = fetchedQuestionnaireGSON.options
 
         activity?.runOnUiThread {
             when (questionType) {
@@ -130,9 +129,8 @@ class AnswerAndEarnFragment : Fragment() {
 
         /* Question Text Goes Here */
         question_actual_question_textview.text = question
-//        options.forEach { Log.d("option_x", "option -> ${it.option}, optionid -> ${it.optionid}, sequence -> ${it.sequence}") }
-//        activity?.runOnUiThread { addRadioButtons(3, options) }
     }
+
     private fun submitResponseAndFetchNext(responseBody: String) {
         val gson = GsonBuilder().create()
         //todo -> add try catch
@@ -140,7 +138,6 @@ class AnswerAndEarnFragment : Fragment() {
 
         val question = submitResponseAndFetchNextGSON.question
         val questionType = submitResponseAndFetchNextGSON.questiontype
-//        val options = submitResponseAndFetchNextGSON.options
 
         activity?.runOnUiThread {
             when (questionType) {
@@ -152,17 +149,28 @@ class AnswerAndEarnFragment : Fragment() {
 
         /* Question Text Goes Here */
         question_actual_question_textview.text = question
-//        options.forEach { Log.d("option_x", "option -> ${it.option}, optionid -> ${it.optionid}, sequence -> ${it.sequence}") }
-//        activity?.runOnUiThread { addRadioButtons(3, options) }
-
-//        /* Removes the RadioGroup */
-//        activity?.runOnUiThread {
-//            val parent = v.findViewById<RadioGroup>(R.id.radiogroup).parent as ViewGroup
-//            parent.removeView(v.findViewById<RadioGroup>(R.id.radiogroup))
-//        }
     }
+
     private fun fetchSkippedQuestions(responseBody: String) {}
-    private fun skipQuestionnaire(responseBody: String) {}
+
+    private fun skipQuestionnaire(responseBody: String) {
+        val gson = GsonBuilder().create()
+        val skipQuestionnaireJSON = gson.fromJson(responseBody, SkipQuestionnaireObj::class.java)
+
+        val question = skipQuestionnaireJSON.question
+        val questionType = skipQuestionnaireJSON.questiontype
+
+        activity?.runOnUiThread {
+            when (questionType) {
+                1 -> showFirstQuestionTypeLayout(skipQuestionnaireJSON.options)
+                2 -> showSecondQuestionTypeLayout()
+                3 -> showThirdQuestionTypeLayout()
+            }
+        }
+
+        /* Question Text Goes Here */
+        question_actual_question_textview.text = question
+    }
 
     fun addRadioButtons(number: Int, options: List<Options>) {
         for (row in 0..0) {
@@ -231,6 +239,7 @@ class AnswerAndEarnFragment : Fragment() {
 }
 
 data class FetchQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>)
-data class Options(val option: String, val sequence: Int, val optionid: Int)
-
 data class SubmitResponseAndFetchNextObj(val question: String, val questiontype: Int, val options: List<Options>)
+data class SkipQuestionnaireObj(val question: String, val questiontype: Int, val options: List<Options>)
+
+data class Options(val option: String, val sequence: Int, val optionid: Int)
