@@ -17,6 +17,7 @@ import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.fragment_answer_and_earn.*
 import org.json.JSONObject
 import java.io.IOException
+import android.util.TypedValue
 
 class AnswerAndEarnFragment : Fragment() {
 
@@ -25,7 +26,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var skipButton: Button
     private lateinit var textEditText: EditText
     private lateinit var numberEditText: EditText
-    private lateinit var radioGroup: RadioGroup
+    private lateinit var optionsContainerLL: LinearLayout
 
     /* Singleton Instance of OkHTTPClient */
     object OKHTTPSingleton {
@@ -53,38 +54,46 @@ class AnswerAndEarnFragment : Fragment() {
     /* IMPORTANT Variables */
     private val appId = 3 //TODO -> Replace with UID Later
 
-    private var userQuestionaireAnswerId = -1 //-1 At Start
+    private var userQuestionaireAnswerId = -1
+
+    private var clickedOptionButtonTag = -1
+    private var clickedOptionText = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_answer_and_earn, container, false)
         /* Perform setup at-start */
         setup(v)
         /* Hide All 3 Initially */
-        hide(radioGroup); hide(textEditText); hide(numberEditText)
+        hide(optionsContainerLL); hide(textEditText); hide(numberEditText)
 
         /* POST Data */
         val fetchQuestionnairePostData = JSONObject().apply {
             put("appid", appId)
         }
-
-        val submitResponseAndFetchNextPostData = JSONObject().apply {
-            put("appid", appId)
-            put("optionid", "")
-            put("option", "UP")
-            put("userquestionaireanswerid", 8)
-        }
-
-        val skipQuestionnairePostData = JSONObject().apply {
-            put("appid", appId)
-            put("userquestionaireanswerid", 9)
-        }
-
         /* Fetch the First Question */
         vanillaPOST(fetchQuestionnaireUrl, fetchQuestionnairePostData, FETCH_QUESTION)
+
         /* Post Response and Fetch Next Question */
-        goButton.setOnClickListener { vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData, SUBMIT_RESPONSE_AND_FETCH_NEXT) }
+        goButton.setOnClickListener {
+            val submitResponseAndFetchNextPostData = JSONObject().apply {
+                put("appid", appId)
+                put("optionid", clickedOptionButtonTag)
+                put("option", clickedOptionText)
+                put("userquestionaireanswerid", userQuestionaireAnswerId)
+            }
+
+            Log.d("api_testing", submitResponseAndFetchNextPostData.toString())
+            vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData, SUBMIT_RESPONSE_AND_FETCH_NEXT)
+        }
+
         /* Skip Question and Fetch Next Question */
-        skipButton.setOnClickListener { vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE) }
+        skipButton.setOnClickListener {
+            val skipQuestionnairePostData = JSONObject().apply {
+                put("appid", appId)
+                put("userquestionaireanswerid", 9)
+            }
+            vanillaPOST(skipQuestionnaireUrl, skipQuestionnairePostData, SKIP_QUESTIONNAIRE)
+        }
 
         return v // Inflate the layout for this fragment
     }
@@ -114,7 +123,7 @@ class AnswerAndEarnFragment : Fragment() {
 
         val question = gsonResponse.question
         val questionType = gsonResponse.questiontype
-        val userQuestionaireAnswerId = gsonResponse.userquestionaireanswerid
+        userQuestionaireAnswerId = gsonResponse.userquestionaireanswerid
 
         activity?.runOnUiThread {
             when (questionType) {
@@ -237,42 +246,50 @@ class AnswerAndEarnFragment : Fragment() {
 
         textEditText = v.findViewById(R.id.text_edittext)
         numberEditText = v.findViewById(R.id.number_edittext)
-        radioGroup = v.findViewById(R.id.radiogroup)
+        optionsContainerLL = v.findViewById(R.id.options_container_ll)
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
     }
 
-    private fun addRadioButtons(number: Int, options: List<Options>) {
-        for (row in 0..0) {
-            val ll = RadioGroup(context)
-            ll.orientation = LinearLayout.VERTICAL
+    private fun addOptionButtons(number: Int, options: List<Options>) {
+        for (i in 1..number) {
+            val button = Button(context)
+            button.id = View.generateViewId()
+            button.text = options[i - 1].option
+            button.setTextColor(Color.WHITE)
+            button.setBackgroundResource(R.drawable.auth_field) //irony is field one looks more button-y, button one looks more empty-eyeyey
+            button.tag = options[i - 1].optionid
+            optionsContainerLL.addView(button)
 
-            for (i in 1..number) {
-                val rdbtn = RadioButton(context)
-                rdbtn.id = View.generateViewId()
-                rdbtn.text = options[i - 1].option
-                rdbtn.setTextColor(Color.WHITE)
-                ll.addView(rdbtn)
+            val params = button.layoutParams as LinearLayout.LayoutParams
+            params.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt() //16dp of Margin Bottom
+            button.layoutParams = params
+
+            //Whenever clicked, we want to stored clicked button option tag -> it has optionid
+            button.setOnClickListener {
+                clickedOptionButtonTag = (it as Button).tag.toString().toInt()
+                clickedOptionText = (it as Button).text.toString()
             }
-            (activity?.findViewById(R.id.radiogroup) as ViewGroup).addView(ll)
+
+            Log.d("option_buttons", button.tag.toString())
         }
     }
 
     /* Shows First Type of Question Layout */
     private fun showFirstQuestionTypeLayout(options: List<Options>) {
         options.forEach { Log.d("option_x", "option -> ${it.option}, optionid -> ${it.optionid}, sequence -> ${it.sequence}") }
-        activity?.runOnUiThread { addRadioButtons(options.size, options) }
+        activity?.runOnUiThread { addOptionButtons(options.size, options) }
 
-        show(radioGroup); hide(textEditText); hide(numberEditText)
+        show(optionsContainerLL); hide(textEditText); hide(numberEditText)
     }
 
     /* Shows Second Type of Question Layout */
-    private fun showSecondQuestionTypeLayout() { hide(radioGroup); show(textEditText); hide(numberEditText) }
+    private fun showSecondQuestionTypeLayout() { hide(optionsContainerLL); show(textEditText); hide(numberEditText) }
 
     /* Shows Third Type of Question Layout */
-    private fun showThirdQuestionTypeLayout() { hide(radioGroup); hide(textEditText); show(numberEditText) }
+    private fun showThirdQuestionTypeLayout() { hide(optionsContainerLL); hide(textEditText); show(numberEditText) }
 
     /* Visibility Helper Methods */
     private fun hide(v: View) { v.visibility = View.GONE }
