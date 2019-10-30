@@ -1,121 +1,140 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".nav.AnswerAndEarnFragment">
+    tools:context=".nav.AnswerAndEarnFragment"
+    android:id="@+id/answer_and_earn_main_frame_layout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.goodearning.QuestionActivity"
         android:background="@drawable/auth_gradient">
 
-        <LinearLayout
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:id="@+id/question_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/question_title_textview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/helvetica_neue_bold"
-                android:gravity="center"
-                android:text="Question"
-                android:textColor="#F0F0F0"
-                android:textSize="38sp" />
-
-            <TextView
-                android:layout_marginTop="16dp"
-                android:id="@+id/question_actual_question_textview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:fontFamily="@font/helvetica_neue_light"
-                android:gravity="center"
-                android:text="Here is where a question will appear for this screen."
-                android:textColor="#F0F0F0"
-                android:textSize="42sp" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/adView"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
+                android:id="@+id/question_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical"
-                android:id="@+id/options_container_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:gravity="top|left"
-                android:hint="Enter Text"
-                android:padding="15dp"
-                android:background="@drawable/auth_button"
-                android:minLines="3"
-                android:inputType="textMultiLine"
-                android:id="@+id/text_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/question_actual_question_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/helvetica_neue_light"
+                    android:gravity="center"
+                    android:text="Here is where a question will appear for this screen."
+                    android:textColor="#F0F0F0"
+                    android:textSize="42sp" />
 
-            <EditText
-                android:hint="Enter Number"
-                android:layout_marginTop="5dp"
-                android:padding="15dp"
-                android:background="@drawable/auth_button"
-                android:inputType="number"
-                android:id="@+id/number_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/options_container_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
-        <Button
-            android:id="@+id/question_go_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/md_green_300"
-            android:background="@drawable/auth_button"
-            android:fontFamily="@font/helvetica_neue_bold"
-            android:text="Next"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/question_skip_button"
-            app:layout_constraintEnd_toEndOf="@+id/question_skip_button" />
+                <EditText
+                    android:id="@+id/text_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/auth_button"
+                    android:gravity="center"
+                    android:hint="Enter Text"
+                    android:textColorHint="#94FFFFFF"
+                    android:inputType="textMultiLine"
+                    android:padding="15dp" />
 
-        <Button
-            android:id="@+id/question_skip_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/md_amber_300"
-            android:background="@drawable/auth_button"
-            android:fontFamily="@font/helvetica_neue_bold"
-            android:text="Skip"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@+id/adView"
-            app:layout_constraintEnd_toEndOf="@+id/adView" />
+                <EditText
+                    android:id="@+id/number_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/auth_button"
+                    android:gravity="center"
+                    android:hint="Enter Number"
+                    android:textColorHint="#94FFFFFF"
+                    android:inputType="number"
+                    android:padding="15dp" />
+
+                <LinearLayout
+                    android:id="@+id/image_container_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/image_preview_imageview"
+                        android:layout_margin="8dp"
+                        android:layout_gravity="center"
+                        android:layout_width="175dp"
+                        android:layout_height="175dp"/>
+                    <Button
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/image_take_a_photo_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/md_orange_300"
+                        android:background="@drawable/auth_button"
+                        android:fontFamily="@font/helvetica_neue_bold"
+                        android:text="Take A Photo"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="25sp" />
+                    <Button
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/image_select_from_gallery_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/md_orange_300"
+                        android:background="@drawable/auth_button"
+                        android:fontFamily="@font/helvetica_neue_bold"
+                        android:text="Select From Gallery"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="25sp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/question_skip_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/md_green_300"
+                    android:background="@drawable/auth_button"
+                    android:fontFamily="@font/helvetica_neue_bold"
+                    android:text="Skip"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp" />
+            </LinearLayout>
+        </ScrollView>
 
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="75dp"
-            android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             ads:adSize="BANNER"
             ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
         </com.google.android.gms.ads.AdView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
