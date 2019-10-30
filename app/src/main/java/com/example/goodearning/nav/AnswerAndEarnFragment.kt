@@ -71,7 +71,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var v: View
 
     /* IMPORTANT Variables */
-    private val appId = 3 //TODO -> Replace with UID Later
+    private val appId = 1 //TODO -> Replace with UID Later
 
     private var userQuestionaireAnswerId = -1
 
@@ -107,48 +107,53 @@ class AnswerAndEarnFragment : Fragment() {
             //Hide Keyboard Whenever Next Question Is Fetched [Safety Code]
             hideKeyboard()
 
-            //Mutating 'option' and 'optionid'
-            when (questionType) {
-                1 -> { //option
-                    //no mutations needed
-                    hide(optionsContainerLL)
+            //Checks Whether Field Empty Or Not
+            if (questionType == 2 && textEditText.text.isEmpty() || questionType == 3 && numberEditText.text.isEmpty()) {
+                Toast.makeText(context, "Input Cannot Be Empty!", Toast.LENGTH_LONG).show()
+            } else {
+                //Mutating 'option' and 'optionid'
+                when (questionType) {
+                    1 -> { //option
+                        //no mutations needed
+                        hide(optionsContainerLL)
+                    }
+                    2 -> { //text
+                        clickedOptionButtonTag = 0 //used for optionid
+                        clickedOptionText = textEditText.text.toString()
+
+                        hide(textEditText)
+                    }
+                    3 -> { //number
+                        clickedOptionButtonTag = 0 //used for optionid
+                        clickedOptionText = numberEditText.text.toString()
+
+                        hide(numberEditText)
+                    }
+                    4 -> { //image
+                        clickedOptionButtonTag = 0 //used for optionid
+
+                        //val imagePreviewBitmap = getBitmapFromImageView(imagePreviewImageView)
+                        //val byteArrayFinal = convertBitmapToByteArray(imagePreviewBitmap)
+
+                        //clickedOptionText = byteArrayFinal //Passing the ByteArray of Bitmap as 'option' parameter
+                        galleryImageUri.let { clickedOptionText = galleryImageUri }
+
+                        hide(imageContainerLL)
+                    }
                 }
-                2 -> { //text
-                    clickedOptionButtonTag = 0 //used for optionid
-                    clickedOptionText = textEditText.text.toString()
 
-                    hide(textEditText)
+                val submitResponseAndFetchNextPostData = JSONObject().apply {
+                    put("appid", appId)
+                    put("optionid", clickedOptionButtonTag) //used for optionid
+                    put("option", clickedOptionText)
+                    put("userquestionaireanswerid", userQuestionaireAnswerId)
                 }
-                3 -> { //number
-                    clickedOptionButtonTag = 0 //used for optionid
-                    clickedOptionText = numberEditText.text.toString()
 
-                    hide(numberEditText)
-                }
-                4 -> { //image
-                    clickedOptionButtonTag = 0 //used for optionid
+                Log.d("api_testing -> submit", submitResponseAndFetchNextPostData.toString())
+                vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData)
 
-                    //val imagePreviewBitmap = getBitmapFromImageView(imagePreviewImageView)
-                    //val byteArrayFinal = convertBitmapToByteArray(imagePreviewBitmap)
-
-                    //clickedOptionText = byteArrayFinal //Passing the ByteArray of Bitmap as 'option' parameter
-                    galleryImageUri.let { clickedOptionText = galleryImageUri }
-
-                    hide(imageContainerLL)
-                }
+                cleanAll()
             }
-
-            val submitResponseAndFetchNextPostData = JSONObject().apply {
-                put("appid", appId)
-                put("optionid", clickedOptionButtonTag) //used for optionid
-                put("option", clickedOptionText)
-                put("userquestionaireanswerid", userQuestionaireAnswerId)
-            }
-
-            Log.d("api_testing -> submit", submitResponseAndFetchNextPostData.toString())
-            vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData)
-
-            cleanAll()
         }
 
         /* Post Response and Fetch Next Question */
