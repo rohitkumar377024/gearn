@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -21,7 +22,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.Menu
-import android.view.MenuItem
+import android.text.SpannableStringBuilder
+import android.text.style.TypefaceSpan
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +42,10 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         /* Sets Toolbar as the SupportActionBar for this Activity */
+        toolbar.setTitleTextAppearance(this, R.style.QuickSandBoldTextAppearance)
         setSupportActionBar(toolbar)
+        /* Gives Toolbar 4dp Elevation Which Gives Beautiful Subtle Shadow Underneath It */
+        supportActionBar?.elevation = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics)
 
         /* Configures the Side Navigation Drawer */
        setupSideNavigation()
@@ -112,7 +117,15 @@ class MainActivity : AppCompatActivity() {
     /* Used in Answer-And-Earn Fragment */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
-        inflater.inflate(R.menu.menu_skip, menu)
+        inflater.inflate(R.menu.menu_submit, menu)
+
+        //works weirdly - but still prettier font idk how tho
+        val span = TypefaceSpan("quicksand_regular.ttf")
+        val title = SpannableStringBuilder("Submit")
+        title.setSpan(span, 0, title.length, 0)
+        val menuItem = menu.findItem(R.id.menu_item_submit)
+        menuItem.title = title
+
         return true
     }
 

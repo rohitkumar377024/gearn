@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -28,6 +29,7 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import androidx.appcompat.app.AppCompatActivity
 import com.rizlee.handler.PermissionHandler
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 
 class AnswerAndEarnFragment : Fragment() {
@@ -68,7 +70,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var v: View
 
     /* IMPORTANT Variables */
-    private val appId = 7 //TODO -> Replace with UID Later
+    private val appId = 3 //TODO -> Replace with UID Later
 
     private var userQuestionaireAnswerId = -1
 
@@ -79,6 +81,8 @@ class AnswerAndEarnFragment : Fragment() {
     private var questionType = -1
 
     private var message = "" //Stores GSON Response 'message' parameter result -> "Success" or "No Other Questions Available" probably...
+
+    private lateinit var galleryImageUri: Uri
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_answer_and_earn, container, false)
@@ -96,6 +100,48 @@ class AnswerAndEarnFragment : Fragment() {
         }
         /* Fetch the First Question */
         vanillaPOST(fetchQuestionnaireUrl, fetchQuestionnairePostData)
+
+        /* Submit Response and Fetch Next Question */
+        activity?.findViewById<Button>(R.id.toolbar_submit_btn)?.setOnClickListener {
+            //Hide Keyboard Whenever Next Question Is Fetched [Safety Code]
+            hideKeyboard()
+
+            //Mutating 'option' and 'optionid'
+            when (questionType) {
+                1 -> { //option
+                    //no mutations needed
+                }
+                2 -> { //text
+                    clickedOptionButtonTag = 0 //used for optionid
+                    clickedOptionText = textEditText.text.toString()
+                }
+                3 -> { //number
+                    clickedOptionButtonTag = 0 //used for optionid
+                    clickedOptionText = numberEditText.text.toString()
+                }
+                4 -> { //image
+                    clickedOptionButtonTag = 0 //used for optionid
+
+                    //val imagePreviewBitmap = getBitmapFromImageView(imagePreviewImageView)
+                    //val byteArrayFinal = convertBitmapToByteArray(imagePreviewBitmap)
+
+                    //clickedOptionText = byteArrayFinal //Passing the ByteArray of Bitmap as 'option' parameter
+                    galleryImageUri.let { clickedOptionText = galleryImageUri }
+                }
+            }
+
+            val submitResponseAndFetchNextPostData = JSONObject().apply {
+                put("appid", appId)
+                put("optionid", clickedOptionButtonTag) //used for optionid
+                put("option", clickedOptionText)
+                put("userquestionaireanswerid", userQuestionaireAnswerId)
+            }
+
+            Log.d("api_testing -> submit", submitResponseAndFetchNextPostData.toString())
+            vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData)
+
+            cleanAll()
+        }
 
         /* Post Response and Fetch Next Question */
         skipButton.setOnClickListener {
@@ -200,10 +246,14 @@ class AnswerAndEarnFragment : Fragment() {
             button.setTextColor(Color.WHITE)
             button.setBackgroundResource(R.drawable.auth_field) //irony is field one looks more button-y, button one looks more empty-eyeyey
             button.tag = options[i - 1].optionid
+            button.isAllCaps = false
+            button.textSize = 21f
             optionsContainerLL.addView(button)
 
             val params = button.layoutParams as LinearLayout.LayoutParams
-            params.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt() //16dp of Margin Bottom
+            params.bottomMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt()
+            params.leftMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
+            params.rightMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, resources.displayMetrics).toInt()
             button.layoutParams = params
 
             //Whenever clicked, we want to stored clicked button option tag -> it has optionid
@@ -267,46 +317,11 @@ class AnswerAndEarnFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_submit -> {
-                //Hide Keyboard Whenever Next Question Is Fetched [Safety Code]
-                hideKeyboard()
 
-                //Mutating 'option' and 'optionid'
-                when (questionType) {
-                    1 -> { //option
-                        //no mutations needed
-                    }
-                    2 -> { //text
-                        clickedOptionButtonTag = 0 //used for optionid
-                        clickedOptionText = textEditText.text.toString()
-                    }
-                    3 -> { //number
-                        clickedOptionButtonTag = 0 //used for optionid
-                        clickedOptionText = numberEditText.text.toString()
-                    }
-                    4 -> { //image
-                        clickedOptionButtonTag = 0 //used for optionid
-
-                        val imagePreviewBitmap = getBitmapFromImageView(imagePreviewImageView)
-                        //val byteArrayFinal = convertBitmapToByteArray(imagePreviewBitmap)
-
-                        clickedOptionText = imagePreviewBitmap //Passing the ByteArray of Bitmap as 'option' parameter
-                    }
-                }
-
-                val submitResponseAndFetchNextPostData = JSONObject().apply {
-                    put("appid", appId)
-                    put("optionid", clickedOptionButtonTag) //used for optionid
-                    put("option", clickedOptionText)
-                    put("userquestionaireanswerid", userQuestionaireAnswerId)
-                }
-
-                Log.d("api_testing -> submit", submitResponseAndFetchNextPostData.toString())
-                vanillaPOST(submitResponseAndFetchNextUrl, submitResponseAndFetchNextPostData)
-
-                cleanAll()
             }
         }
         return false
@@ -354,7 +369,7 @@ class AnswerAndEarnFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK) { /* First Check If Result Code is OK */
             when (requestCode) { /* Check Which Request Code */
                 PICK_GALLERY -> { /* Gallery Operation */
-                    val galleryImageUri = data?.data!!
+                    galleryImageUri = data?.data!!
                     imagePreviewImageView.setImageURI(galleryImageUri)
                     showImagePreview() /* Show Image Preview Now */
                     hide(imageSelectFromGalleryBtn)

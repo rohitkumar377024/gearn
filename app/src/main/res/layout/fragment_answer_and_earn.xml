@@ -33,35 +33,59 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/question_actual_question_textview"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/question_actual_question_cardview"
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"
-                    android:fontFamily="@font/helvetica_neue_light"
-                    android:gravity="center"
-                    android:text="Here is where a question will appear for this screen."
-                    android:textColor="#F0F0F0"
-                    android:textSize="42sp" />
+                    card_view:cardCornerRadius="8dp"
+                    card_view:cardElevation="4dp"
+                    card_view:cardUseCompatPadding="true"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeMaxTextSize="28sp"
+                        app:autoSizeStepGranularity="2sp"
+                        android:padding="16dp"
+                        android:id="@+id/question_actual_question_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="90dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="The Question Goes Over Here."
+                        android:textColor="#000000"
+                        android:textSize="28sp"/>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
+                    android:layout_marginTop="8dp"
                     android:id="@+id/options_container_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
                 <EditText
+                    android:fontFamily="@font/quicksand_regular"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:id="@+id/text_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/auth_button"
                     android:gravity="center"
                     android:hint="Enter Text"
-                    android:textColorHint="#94FFFFFF"
+                    android:textColorHint="#000000"
                     android:inputType="textMultiLine"
                     android:padding="15dp" />
 
                 <EditText
+                    android:fontFamily="@font/quicksand_regular"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:id="@+id/number_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,7 +93,7 @@
                     android:background="@drawable/auth_button"
                     android:gravity="center"
                     android:hint="Enter Number"
-                    android:textColorHint="#94FFFFFF"
+                    android:textColorHint="#000000"
                     android:inputType="number"
                     android:padding="15dp" />
 
@@ -89,39 +113,39 @@
                         android:id="@+id/image_take_a_photo_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/md_orange_300"
-                        android:background="@drawable/auth_button"
-                        android:fontFamily="@font/helvetica_neue_bold"
+                        android:background="@drawable/auth_field"
+                        android:backgroundTint="@color/colorAccent"
+                        android:fontFamily="@font/quicksand_semibold"
                         android:text="Take A Photo"
                         android:textAllCaps="false"
                         android:textColor="@android:color/white"
-                        android:textSize="25sp" />
+                        android:textSize="21sp" />
                     <Button
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="8dp"
                         android:id="@+id/image_select_from_gallery_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/md_orange_300"
-                        android:background="@drawable/auth_button"
-                        android:fontFamily="@font/helvetica_neue_bold"
+                        android:background="@drawable/auth_field"
+                        android:backgroundTint="@color/colorAccent"
+                        android:fontFamily="@font/quicksand_semibold"
                         android:text="Select From Gallery"
                         android:textAllCaps="false"
                         android:textColor="@android:color/white"
-                        android:textSize="25sp" />
+                        android:textSize="21sp"  />
                 </LinearLayout>
 
                 <Button
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:background="@android:color/transparent"
                     android:layout_marginTop="5dp"
                     android:id="@+id/question_skip_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/md_green_300"
-                    android:background="@drawable/auth_button"
-                    android:fontFamily="@font/helvetica_neue_bold"
-                    android:text="Skip"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text="@string/skip_underline_string"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="25sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
 
@@ -129,9 +153,9 @@
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            ads:adSize="BANNER"
+            ads:adSize="SMART_BANNER"
             ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
         </com.google.android.gms.ads.AdView>
 

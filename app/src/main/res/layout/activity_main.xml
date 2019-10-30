@@ -9,13 +9,24 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryDark"
+        android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        app:layout_constraintTop_toTopOf="parent">
+        <Button
+            android:textAllCaps="false"
+            android:fontFamily="@font/quicksand_bold"
+            android:id="@+id/toolbar_submit_btn"
+            android:textColor="@color/md_white_1000"
+            android:background="@drawable/auth_field"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:textSize="17sp"
+            android:text="Submit"
+            android:layout_gravity="right" />
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Where Fragments are Loaded -->
     <FrameLayout

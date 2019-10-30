@@ -6,4 +6,7 @@
 
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string> <!-- test one -->
 <!--    <string name="admob_app_id">ca-app-pub-8756869056961999~8233273112</string>--> <!-- original one -->
+
+<!--    Adding this for underline -->
+    <string name="skip_underline_string"><u>Skip</u></string>
 </resources>
