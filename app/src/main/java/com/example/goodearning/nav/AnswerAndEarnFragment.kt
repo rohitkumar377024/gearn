@@ -70,7 +70,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var v: View
 
     /* IMPORTANT Variables */
-    private val appId = 3 //TODO -> Replace with UID Later
+    private val appId = 1 //TODO -> Replace with UID Later
 
     private var userQuestionaireAnswerId = -1
 
@@ -166,8 +166,13 @@ class AnswerAndEarnFragment : Fragment() {
         imageTakeAPhotoBtn.setOnClickListener { takeAPhoto() }
         imageSelectFromGalleryBtn.setOnClickListener { selectFromGallery() }
 
+        showSubmitBtn()
+
         return v // Inflate the layout for this fragment
     }
+
+    /* Shows 'Submit' Button of the MainActivity */
+    private fun showSubmitBtn() { activity?.findViewById<Button>(R.id.toolbar_submit_btn)?.visibility = View.VISIBLE }
 
     /* Enqueues POST Request */
     private fun vanillaPOST(url: String, postData: JSONObject) {
@@ -310,21 +315,6 @@ class AnswerAndEarnFragment : Fragment() {
         optionsContainerLL.removeAllViews()
         textEditText.text.clear()
         numberEditText.text.clear()
-    }
-
-    /* Below 2 Functions are Needed for Skip Option On Top */
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menu_item_submit -> {
-
-            }
-        }
-        return false
     }
 
     /* Helper Functions for Soft Keyboard */

@@ -114,19 +114,4 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    /* Used in Answer-And-Earn Fragment */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_submit, menu)
-
-        //works weirdly - but still prettier font idk how tho
-        val span = TypefaceSpan("quicksand_regular.ttf")
-        val title = SpannableStringBuilder("Submit")
-        title.setSpan(span, 0, title.length, 0)
-        val menuItem = menu.findItem(R.id.menu_item_submit)
-        menuItem.title = title
-
-        return true
-    }
-
 }
