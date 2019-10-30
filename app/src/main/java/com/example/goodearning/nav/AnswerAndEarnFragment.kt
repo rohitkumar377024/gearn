@@ -44,6 +44,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var imageSelectFromGalleryBtn: Button
     private lateinit var imagePreviewImageView: ImageView
     private lateinit var mainFrameLayout: FrameLayout
+    private lateinit var noMoreQuestionsTextView: TextView
 
     /* Singleton Instance of OkHTTPClient */
     object OKHTTPSingleton {
@@ -70,7 +71,7 @@ class AnswerAndEarnFragment : Fragment() {
     private lateinit var v: View
 
     /* IMPORTANT Variables */
-    private val appId = 1 //TODO -> Replace with UID Later
+    private val appId = 3 //TODO -> Replace with UID Later
 
     private var userQuestionaireAnswerId = -1
 
@@ -110,14 +111,19 @@ class AnswerAndEarnFragment : Fragment() {
             when (questionType) {
                 1 -> { //option
                     //no mutations needed
+                    hide(optionsContainerLL)
                 }
                 2 -> { //text
                     clickedOptionButtonTag = 0 //used for optionid
                     clickedOptionText = textEditText.text.toString()
+
+                    hide(textEditText)
                 }
                 3 -> { //number
                     clickedOptionButtonTag = 0 //used for optionid
                     clickedOptionText = numberEditText.text.toString()
+
+                    hide(numberEditText)
                 }
                 4 -> { //image
                     clickedOptionButtonTag = 0 //used for optionid
@@ -127,6 +133,8 @@ class AnswerAndEarnFragment : Fragment() {
 
                     //clickedOptionText = byteArrayFinal //Passing the ByteArray of Bitmap as 'option' parameter
                     galleryImageUri.let { clickedOptionText = galleryImageUri }
+
+                    hide(imageContainerLL)
                 }
             }
 
@@ -173,6 +181,8 @@ class AnswerAndEarnFragment : Fragment() {
 
     /* Shows 'Submit' Button of the MainActivity */
     private fun showSubmitBtn() { activity?.findViewById<Button>(R.id.toolbar_submit_btn)?.visibility = View.VISIBLE }
+    /* Exists -> Just In-Case If Needed */
+    private fun hideSubmitBtn() { activity?.findViewById<Button>(R.id.toolbar_submit_btn)?.visibility = View.GONE }
 
     /* Enqueues POST Request */
     private fun vanillaPOST(url: String, postData: JSONObject) {
@@ -183,6 +193,7 @@ class AnswerAndEarnFragment : Fragment() {
             override fun onResponse(response: com.squareup.okhttp.Response?) {
                 val responseBody = response?.body()?.string()
                 Log.e("post_success", responseBody!!)
+
                 /* Make Changes with Response */
                 receiveAndMutateResponse(responseBody)
             }
@@ -202,19 +213,31 @@ class AnswerAndEarnFragment : Fragment() {
         userQuestionaireAnswerId = gsonResponse.userquestionaireanswerid
         message = gsonResponse.message
 
-        /* Handle Answer Layout */
-        activity?.runOnUiThread {
-            when (questionType) {
-                1 -> showFirstQuestionTypeLayout(gsonResponse.options)
-                2 -> showSecondQuestionTypeLayout()
-                3 -> showThirdQuestionTypeLayout()
-                4 -> showFourthQuestionTypeLayout()
+        /* Checking Whether If More Questions Are Available */
+        if (message == "No More Question available") {
+            //NOT AVAILABLE
+            Log.d("post_no_more_questions", "true")
+            activity?.runOnUiThread {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                /* Show No More Questions */
+                show(noMoreQuestionsTextView)
             }
-        }
+        } else {
+            //AVAILABLE
+            /* Handle Answer Layout */
+            activity?.runOnUiThread {
+                when (questionType) {
+                    1 -> showFirstQuestionTypeLayout(gsonResponse.options)
+                    2 -> showSecondQuestionTypeLayout()
+                    3 -> showThirdQuestionTypeLayout()
+                    4 -> showFourthQuestionTypeLayout()
+                }
+            }
 
-        activity?.runOnUiThread {
-            /* Question Text Goes Here */
-            question_actual_question_textview.text = question
+            activity?.runOnUiThread {
+                /* Question Text Goes Here */
+                question_actual_question_textview.text = question
+            }
         }
     }
 
@@ -237,6 +260,7 @@ class AnswerAndEarnFragment : Fragment() {
         imageSelectFromGalleryBtn = v.findViewById(R.id.image_select_from_gallery_btn)
         imagePreviewImageView = v.findViewById(R.id.image_preview_imageview)
         mainFrameLayout = v.findViewById(R.id.answer_and_earn_main_frame_layout)
+        noMoreQuestionsTextView = v.findViewById(R.id.no_more_questions_textview)
 
         MobileAds.initialize(context, getString(R.string.admob_app_id))
         val adRequest = AdRequest.Builder().build()
@@ -277,31 +301,31 @@ class AnswerAndEarnFragment : Fragment() {
 
     /* Shows First Type of Question Layout */
     private fun showFirstQuestionTypeLayout(options: List<Options>) {
-        hide(skipButton) /* Hide When Options Type Question */
+        hideSubmitBtn() /* Hide When Options Type Question */
 
         options.forEach { Log.d("option_x", "option -> ${it.option}, optionid -> ${it.optionid}, sequence -> ${it.sequence}") }
         activity?.runOnUiThread { addOptionButtons(options.size, options) }
 
-        show(optionsContainerLL); hide(textEditText); hide(numberEditText);  hide(imageContainerLL);
+        show(optionsContainerLL); hide(textEditText); hide(numberEditText);  hide(imageContainerLL)
     }
 
     /* Shows Second Type of Question Layout */ /* Show Keyboard Pop Up Automatically */
     private fun showSecondQuestionTypeLayout() {
-        show(skipButton)
+        showSubmitBtn()
 
         hide(optionsContainerLL); show(textEditText); hide(numberEditText); hide(imageContainerLL); textEditText.showKeyboard()
     }
 
     /* Shows Third Type of Question Layout */ /* Show Keyboard Pop Up Automatically */
     private fun showThirdQuestionTypeLayout() {
-        show(skipButton)
+        showSubmitBtn()
 
         hide(optionsContainerLL); hide(textEditText); show(numberEditText); hide(imageContainerLL); numberEditText.showKeyboard()
     }
 
     /* Shows Fourth Type of Question Layout */
     private fun showFourthQuestionTypeLayout() {
-        hide(skipButton) /* Hide When Image Type Question [At First] */
+        hideSubmitBtn() /* Hide When Image Type Question [At First] */
 
         hide(optionsContainerLL); hide(textEditText); hide(numberEditText); show(imageContainerLL)
     }
@@ -364,7 +388,7 @@ class AnswerAndEarnFragment : Fragment() {
                     showImagePreview() /* Show Image Preview Now */
                     hide(imageSelectFromGalleryBtn)
                     hide(imageTakeAPhotoBtn)
-                    show(skipButton)
+                    showSubmitBtn()
                 }
                 PICK_CAMERA -> { /* Camera Operation */
                     val bitmap = data?.extras?.get("data") as Bitmap
@@ -372,7 +396,7 @@ class AnswerAndEarnFragment : Fragment() {
                     showImagePreview() /* Show Image Preview Now */
                     hide(imageSelectFromGalleryBtn)
                     hide(imageTakeAPhotoBtn)
-                    show(skipButton)
+                    showSubmitBtn()
                 }
             }
         }
